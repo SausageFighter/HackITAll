@@ -1,6 +1,8 @@
 package mihaiolaru.com.roadtrip;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.Editable;
@@ -21,6 +23,7 @@ public class SettingsActivity extends AppCompatActivity {
     EditText capacityInput;
     TextView range;
     Button inapoiButton;
+    SharedPreferences sharedPreferences;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,6 +34,25 @@ public class SettingsActivity extends AppCompatActivity {
 
         consumptionInput = (EditText)findViewById(R.id.consum);
         capacityInput = (EditText)findViewById(R.id.baterie);
+
+        sharedPreferences = getSharedPreferences("pref", Context.MODE_PRIVATE);
+        String battery = sharedPreferences.getString("battery","");
+        String cons = sharedPreferences.getString("consumption","");
+        capacityInput.setText(battery);
+        consumptionInput.setText(cons);
+
+        try {
+            if (Double.parseDouble(capacityInput.getText().toString()) == 0)
+                return;
+            if (!consumptionInput.getText().toString().isEmpty()) {
+                Float result = Float.parseFloat(consumptionInput.getText().toString()) / Float.parseFloat(capacityInput.getText().toString());
+                range = (TextView) findViewById(R.id.range);
+                String formattedString = String.format("%.02f", result);
+                range.setText(formattedString+ " km");
+            }
+        }catch (Exception e){e.printStackTrace();}
+
+        final SharedPreferences.Editor editor = sharedPreferences.edit();
 
         consumptionInput.addTextChangedListener(new TextWatcher() {
             @Override
@@ -44,7 +66,15 @@ public class SettingsActivity extends AppCompatActivity {
                     if (Double.parseDouble(capacityInput.getText().toString()) == 0)
                         return;
                     if (!capacityInput.getText().toString().isEmpty()) {
-                        Float result = Float.parseFloat(consumptionInput.getText().toString()) / Float.parseFloat(capacityInput.getText().toString());
+
+                        editor.putString("battery",capacityInput.getText().toString());
+                        editor.putString("consumption",consumptionInput.getText().toString());
+                        editor.commit();
+
+//                        consumptionInput.setText(sharedPreferences.getString("consumption","").toString());
+
+
+                        Float result = Float.parseFloat(sharedPreferences.getString("consumption","")) / Float.parseFloat(sharedPreferences.getString("battery",""));
                         range = (TextView) findViewById(R.id.range);
                         String formattedString = String.format("%.02f", result);
                         range.setText(formattedString+ " km");
@@ -72,7 +102,15 @@ public class SettingsActivity extends AppCompatActivity {
                     if (Double.parseDouble(capacityInput.getText().toString()) == 0)
                         return;
                     if (!consumptionInput.getText().toString().isEmpty()) {
-                        Float result = Float.parseFloat(consumptionInput.getText().toString()) / Float.parseFloat(capacityInput.getText().toString());
+
+                        editor.putString("battery",capacityInput.getText().toString());
+                        editor.putString("consumption",consumptionInput.getText().toString());
+                        editor.commit();
+
+//                        capacityInput.setText(sharedPreferences.getString("battery",""));
+
+                        Float result = Float.parseFloat(sharedPreferences.getString("consumption","")) / Float.parseFloat(sharedPreferences.getString("battery",""));
+                        //Float result = Float.parseFloat(consumptionInput.getText().toString()) / Float.parseFloat(capacityInput.getText().toString());
                         range = (TextView) findViewById(R.id.range);
                         String formattedString = String.format("%.02f", result);
                         range.setText(formattedString+ " km");
@@ -93,6 +131,9 @@ public class SettingsActivity extends AppCompatActivity {
         inapoiButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+                consumptionInput.setText(sharedPreferences.getString("consumption",""));
+                capacityInput.setText(sharedPreferences.getString("battery",""));
                 Intent settingsScreen = new Intent(SettingsActivity.this, AddTrip.class);
                 startActivity(settingsScreen);
             }
