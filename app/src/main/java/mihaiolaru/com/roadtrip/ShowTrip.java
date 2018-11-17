@@ -376,18 +376,18 @@ public class ShowTrip extends FragmentActivity implements OnMapReadyCallback {
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
 
-        /*
+
         Intent intent = getIntent();
         String start_coords = intent.getStringExtra("start_coords");
         String dest_coords = intent.getStringExtra("dest_coords");
         String start_date = intent.getStringExtra("start_date");
         String end_date = intent.getStringExtra("end_date");
-        */
 
-        String start_coords = "43.5_-123.5";
-        String dest_coords = "45.5_-122.5";
-        String start_date = "a";
-        String end_date = "a";
+
+//        String start_coords = "43.5_-123.5";
+//        String dest_coords = "45.5_-122.5";
+//        String start_date = "a";
+//        String end_date = "a";
 
         Double lastLat = null,lastLng = null;
         String result = getTripRoute(start_coords,dest_coords,start_date,end_date);
