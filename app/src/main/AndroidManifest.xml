@@ -39,7 +39,6 @@
         <activity
             android:name=".ShowTrip"
             android:label="@string/title_activity_show_trip"></activity>
->>>>>>> 04c5d1aebd1e4693550e68f8e0381dfa09bf4281
     </application>
 
 </manifest>
