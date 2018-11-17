@@ -1,10 +1,12 @@
 package mihaiolaru.com.roadtrip;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
@@ -16,6 +18,7 @@ public class SettingsActivity extends AppCompatActivity {
     EditText consumptionInput;
     EditText capacityInput;
     TextView range;
+    Button inapoiButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -75,6 +78,14 @@ public class SettingsActivity extends AppCompatActivity {
 //        Double result =  Double.parseDouble(consumptionInput.getText().toString()) / Double.parseDouble(consumptionInput.getText().toString());
 //        range = (TextView)findViewById(R.id.range);
 //        range.setText(result.toString());
+        inapoiButton = (Button)findViewById(R.id.inapoi);
+        inapoiButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent settingsScreen = new Intent(SettingsActivity.this, AddTrip.class);
+                startActivity(settingsScreen);
+            }
+        });
     }
 
 }
