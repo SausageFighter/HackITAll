@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">Road Trip</string>
+    <string name="title_activity_show_trip">Map</string>
 </resources>

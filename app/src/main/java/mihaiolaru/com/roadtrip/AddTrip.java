@@ -18,7 +18,8 @@ public class AddTrip extends AppCompatActivity {
         buton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent mapScreen = new Intent(AddTrip.this, RoadMap.class);
+                Intent mapScreen = new Intent(AddTrip.this, ShowTrip.class);
+                startActivity(mapScreen);
             }
         });
     }
