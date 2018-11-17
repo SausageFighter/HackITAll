@@ -378,9 +378,9 @@ public class ShowTrip extends FragmentActivity implements OnMapReadyCallback {
 
 
         Intent intent = getIntent();
-        String start_coords = intent.getStringExtra("start_coords");
+        String start_coords = intent.getStringExtra("start_coords").replace(":","_");
         String dest_coords = intent.getStringExtra("dest_coords");
-        String start_date = intent.getStringExtra("start_date");
+        String start_date = intent.getStringExtra("start_date").replace(":","_");
         String end_date = intent.getStringExtra("end_date");
 
         Log.d(" pls work", start_coords+dest_coords+start_date+end_date);

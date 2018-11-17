@@ -23,8 +23,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
-        <activity android:name=".SettingsActivity"></activity>
+        <activity android:name=".SettingsActivity" />
 
         <!--
              The API key for Google Maps-based APIs is defined as a string resource.
@@ -40,8 +39,10 @@
 
         <activity
             android:name=".ShowTrip"
-            android:label="@string/title_activity_show_trip"></activity>
-
+            android:label="@string/title_activity_show_trip" />
+        <activity
+            android:name=".chooseLocation"
+            android:label="@string/title_activity_choose_location"></activity>
     </application>
 
 </manifest>

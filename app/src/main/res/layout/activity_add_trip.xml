@@ -24,12 +24,13 @@
         android:layout_marginBottom="6dp"
         android:ems="10"
         android:hint="@string/hintPlec"
-        android:inputType="textPersonName"
+        android:inputType="textPersonName|date"
         app:layout_constraintBottom_toTopOf="@+id/editText2"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_chainStyle="spread_inside" />
 
     <EditText
         android:id="@+id/editText2"
@@ -39,7 +40,7 @@
         android:layout_marginBottom="6dp"
         android:ems="10"
         android:hint="@string/dateFormat"
-        android:inputType="datetime"
+        android:inputType="date"
         app:layout_constraintBottom_toTopOf="@+id/editText3"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
