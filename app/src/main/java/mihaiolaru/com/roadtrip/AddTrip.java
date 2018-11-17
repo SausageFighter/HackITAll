@@ -28,8 +28,8 @@ public class AddTrip extends AppCompatActivity {
         settings.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-             //   Intent settingsActivity = new Intent(AddTrip.this, SettingsActivity.class);
-               // startActivity(settingsActivity);
+                Intent settingsActivity = new Intent(AddTrip.this, SettingsActivity.class);
+                startActivity(settingsActivity);
             }
         });
     }
