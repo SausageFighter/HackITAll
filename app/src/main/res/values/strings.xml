@@ -1,6 +1,13 @@
 <resources>
     <string name="app_name">Road Trip</string>
+
     <string name="consum">kW/km</string>
     <string name="baterie">kWh</string>
     <string name="range">km/h</string>
+
+    <string name="hintPlec">De unde?</string>
+    <string name="dateFormat">mm/dd/yyyy</string>
+    <string name="hintDest">Pana unde?</string>
+    <string name="title_activity_show_trip">Map</string>
+    
 </resources>

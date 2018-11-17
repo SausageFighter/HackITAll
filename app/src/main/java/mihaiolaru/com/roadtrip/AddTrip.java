@@ -1,6 +1,7 @@
 package mihaiolaru.com.roadtrip;
 
 import android.content.Intent;
+import android.media.Image;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -13,12 +14,22 @@ public class AddTrip extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_trip);
 
-        Button buton = (Button)findViewById(R.id.button);
+        Button button = (Button)findViewById(R.id.button);
+        View settings = findViewById(R.id.settings);
 
-        buton.setOnClickListener(new View.OnClickListener() {
+        button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent mapScreen = new Intent(AddTrip.this, RoadMap.class);
+                Intent mapScreen = new Intent(AddTrip.this, ShowTrip.class);
+                startActivity(mapScreen);
+            }
+        });
+
+        settings.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+             //   Intent settingsActivity = new Intent(AddTrip.this, SettingsActivity.class);
+               // startActivity(settingsActivity);
             }
         });
     }
