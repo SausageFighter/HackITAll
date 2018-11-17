@@ -1,5 +1,6 @@
 package mihaiolaru.com.roadtrip;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.media.Image;
 import android.support.v7.app.AppCompatActivity;
@@ -10,6 +11,7 @@ import android.widget.EditText;
 
 public class AddTrip extends AppCompatActivity {
 
+    @SuppressLint("SetTextI18n")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -23,11 +25,21 @@ public class AddTrip extends AppCompatActivity {
 
         Intent intentGet = getIntent();
         final String start_coords1 = intentGet.getStringExtra("start_coords");
-        if(start_coords1 != null)
-            start_place.setText(start_coords1);
+        if(start_coords1 != null) {
+            Float tmp_lat = Float.parseFloat(start_coords1.split(":")[0]);
+            Float tmp_lng = Float.parseFloat(start_coords1.split(":")[1]);
+            @SuppressLint("DefaultLocale") String formattedString1 = String.format("%.02f", tmp_lat);
+            @SuppressLint("DefaultLocale") String formattedString2 = String.format("%.02f", tmp_lng);
+            start_place.setText(formattedString1+":"+formattedString2);
+        }
         final String end_coords1 = intentGet.getStringExtra("end_coords");
-        if(start_coords1 != null)
-            start_place.setText(end_coords1);
+        if(end_coords1 != null) {
+            Float tmp_lat = Float.parseFloat(end_coords1.split(":")[0]);
+            Float tmp_lng = Float.parseFloat(end_coords1.split(":")[1]);
+            @SuppressLint("DefaultLocale") String formattedString1 = String.format("%.02f", tmp_lat);
+            @SuppressLint("DefaultLocale") String formattedString2 = String.format("%.02f", tmp_lng);
+            end_place.setText(formattedString1+":"+formattedString2);
+        }
 
         start_place.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -38,6 +50,7 @@ public class AddTrip extends AppCompatActivity {
                     intent.putExtra("start_coords",start_coords1);
                 if(end_coords1 != null)
                     intent.putExtra("end_coords",end_coords1);
+                startActivity(intent);
             }
         });
 
@@ -50,14 +63,20 @@ public class AddTrip extends AppCompatActivity {
                     intent.putExtra("start_coords",start_coords1);
                 if(end_coords1 != null)
                 intent.putExtra("end_coords",end_coords1);
+                startActivity(intent);
             }
         });
 
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String start_coords = start_place.getText().toString();
-                String dest_coords = end_place.getText().toString();
+                Intent myIntent = getIntent();
+                String start_coords = myIntent.getStringExtra("start_coords");
+                if(start_coords == null)
+                    return;
+                String dest_coords = myIntent.getStringExtra("end_coords");
+                if(dest_coords == null)
+                    return;
                 String start_date = ((EditText)findViewById(R.id.editText2)).getText().toString();
                 String end_date = ((EditText)findViewById(R.id.editText4)).getText().toString();
 

@@ -203,7 +203,6 @@ public class ShowTrip extends FragmentActivity implements OnMapReadyCallback {
         // Building the url to the web service
         String url = "https://maps.googleapis.com/maps/api/directions/" + output + "?" + parameters + "&key=" + "AIzaSyDV83sPgKPVqRd8QnR6HpXSoYHSe8349XI";
 
-
         return url;
     }
 
@@ -358,8 +357,15 @@ public class ShowTrip extends FragmentActivity implements OnMapReadyCallback {
         FetchUrl FetchUrl = new FetchUrl();
         FetchUrl.execute(url);
     }
-    String getTripRoute(String start,String dest, String start_date,String end_date){
-        String link = "http://hackitall-env.3kg4pnfmbw.us-east-2.elasticbeanstalk.com/hackitall_webapp/index.php?location_start=" + start + "&location_end=" + dest + "&date_start="+start_date+"&date_end="+end_date;
+    String getTripRoute(String start,String dest, String start_date,String end_date, String battery){
+        start = start.replace(":","_");
+        dest = dest.replace(":","_");
+        Log.d("initial data",start+"---"+dest);
+        if(battery == null)
+            battery = "";
+        else
+            battery = "&battery="+battery;
+        String link = "http://hackitall-env.3kg4pnfmbw.us-east-2.elasticbeanstalk.com/hackitall_webapp/index.php?location_start=" + start + "&location_end=" + dest + "&date_start="+start_date+"&date_end="+end_date+battery;
         ServerGetter serverGetter = new ServerGetter(link);
         serverGetter.start();
         try {
@@ -369,6 +375,10 @@ public class ShowTrip extends FragmentActivity implements OnMapReadyCallback {
         }
 
         String siteResult =  serverGetter.result.get();
+        Log.d(" site result",siteResult);
+        if(siteResult.contains("Impossible route"))
+            return null;
+
         return (siteResult.split("Final Route<br>")[1]).split("</h1>")[0];
     }
 
@@ -382,26 +392,31 @@ public class ShowTrip extends FragmentActivity implements OnMapReadyCallback {
         String dest_coords = intent.getStringExtra("dest_coords");
         String start_date = intent.getStringExtra("start_date").replace(":","_");
         String end_date = intent.getStringExtra("end_date");
-
-        Log.d(" pls work", start_coords+dest_coords+start_date+end_date);
-
+        String battery = "100";//TODO
 //        String start_coords = "43.5_-123.5";
 //        String dest_coords = "45.5_-122.5";
 //        String start_date = "a";
 //        String end_date = "a";
 
         Double lastLat = null,lastLng = null;
-        String result = getTripRoute(start_coords,dest_coords,start_date,end_date);
-        Log.d("get site res",result);
+        String result = getTripRoute(start_coords,dest_coords,start_date,end_date,battery);
+        if(result == null)
+            return;
         String[] points = result.split("\\|\\|\\|");
         int stage = 1;
         for (String point : points){
             //get coords
             Double lat = Double.parseDouble(point.split("#")[0]);
             Double lng = Double.parseDouble(point.split("#")[1]);
-
+            String name = "";
+            if(point.split("#").length > 2)
+                name = point.split("#")[2];
+            if(point.equals(points[0]))
+                name = "Start";
+            if(point.equals(points[points.length - 1]))
+                name = "Destination";
             //add marker at position
-            MarkerOptions marker = new MarkerOptions().position(new LatLng(lat, lng)).title("Point " + stage);
+            MarkerOptions marker = new MarkerOptions().position(new LatLng(lat, lng)).title(name);
             stage++;
 
             mMap.addMarker(marker);
