@@ -6,7 +6,7 @@
     <string name="range">km</string>
 
     <string name="hintPlec">De unde?</string>
-    <string name="dateFormat">mm/dd/yyyy</string>
+    <string name="dateFormat">dd/mm/yyyy</string>
     <string name="hintDest">Pana unde?</string>
     <string name="title_activity_show_trip">Map</string>
     <string name="title_activity_choose_location">Map</string>

@@ -154,6 +154,14 @@ public class chooseLocation extends FragmentActivity implements OnMapReadyCallba
                 if(initial.getStringExtra("from").equals("start")){
                     Intent intent = new Intent(chooseLocation.this, AddTrip.class);
                     intent.putExtra("start_coords", lat + ":" + lng);
+
+                    if (initial.getStringExtra("dataPlecare") != null) {
+                        intent.putExtra("dataPlecare", initial.getStringExtra("dataPlecare") );
+                    }
+                    if (initial.getStringExtra("dataIntoarcere") != null) {
+                        intent.putExtra("dataIntoarcere", initial.getStringExtra("dataIntoarcere") );
+                    }
+
                     if(initial.getStringExtra("end_coords") != null)
                         intent.putExtra("end_coords",initial.getStringExtra("end_coords"));
                     startActivity(intent);
@@ -162,6 +170,14 @@ public class chooseLocation extends FragmentActivity implements OnMapReadyCallba
                     if(initial.getStringExtra("start_coords") != null)
                         intent.putExtra("start_coords",initial.getStringExtra("start_coords"));
                     intent.putExtra("end_coords", lat + ":" + lng);
+
+                    if (initial.getStringExtra("dataPlecare") != null) {
+                        intent.putExtra("dataPlecare", initial.getStringExtra("dataPlecare") );
+                    }
+                    if (initial.getStringExtra("dataIntoarcere") != null) {
+                        intent.putExtra("dataIntoarcere", initial.getStringExtra("dataIntoarcere") );
+                    }
+
                     startActivity(intent);
                 }
             }
