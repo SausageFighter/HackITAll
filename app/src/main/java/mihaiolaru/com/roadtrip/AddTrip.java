@@ -27,8 +27,8 @@ public class AddTrip extends AppCompatActivity {
                 String end_date = ((EditText)findViewById(R.id.editText4)).getText().toString();
 
                 Intent mapScreen = new Intent(AddTrip.this, ShowTrip.class);
-                mapScreen.putExtra("start_coord", start_coords);
-                mapScreen.putExtra("dest_coord", dest_coords);
+                mapScreen.putExtra("start_coords", start_coords);
+                mapScreen.putExtra("dest_coords", dest_coords);
                 mapScreen.putExtra("start_date", start_date);
                 mapScreen.putExtra("end_date", end_date);
 
