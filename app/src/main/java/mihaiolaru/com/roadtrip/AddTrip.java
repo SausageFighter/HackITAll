@@ -13,9 +13,9 @@ public class AddTrip extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_trip);
 
-        Button buton = (Button)findViewById(R.id.button);
+        Button button = (Button)findViewById(R.id.button);
 
-        buton.setOnClickListener(new View.OnClickListener() {
+        button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent mapScreen = new Intent(AddTrip.this, RoadMap.class);
