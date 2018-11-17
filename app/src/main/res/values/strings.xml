@@ -3,7 +3,7 @@
 
     <string name="consum">kW/km</string>
     <string name="baterie">kWh</string>
-    <string name="range">km/h</string>
+    <string name="range">km</string>
 
     <string name="hintPlec">De unde?</string>
     <string name="dateFormat">mm/dd/yyyy</string>

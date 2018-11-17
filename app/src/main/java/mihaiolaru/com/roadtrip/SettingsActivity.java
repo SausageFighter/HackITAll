@@ -10,6 +10,8 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import java.text.DecimalFormat;
+
 public class SettingsActivity extends AppCompatActivity {
 
     int consumption;
@@ -38,11 +40,16 @@ public class SettingsActivity extends AppCompatActivity {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                if(!capacityInput.getText().toString().isEmpty()){
-                    Double result =  Double.parseDouble(consumptionInput.getText().toString()) / Double.parseDouble(consumptionInput.getText().toString());
-                    range = (TextView)findViewById(R.id.range);
-                    range.setText(result.toString());
-                }
+                try {
+                    if (Double.parseDouble(capacityInput.getText().toString()) == 0)
+                        return;
+                    if (!capacityInput.getText().toString().isEmpty()) {
+                        Float result = Float.parseFloat(consumptionInput.getText().toString()) / Float.parseFloat(capacityInput.getText().toString());
+                        range = (TextView) findViewById(R.id.range);
+                        String formattedString = String.format("%.02f", result);
+                        range.setText(formattedString+ " km");
+                    }
+                }catch (Exception e){e.printStackTrace();}
             }
 
             @Override
@@ -61,12 +68,16 @@ public class SettingsActivity extends AppCompatActivity {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-
-                if(!consumptionInput.getText().toString().isEmpty()){
-                    Double result =  Double.parseDouble(consumptionInput.getText().toString()) / Double.parseDouble(consumptionInput.getText().toString());
-                    range = (TextView)findViewById(R.id.range);
-                    range.setText(result.toString());
-                }
+                try {
+                    if (Double.parseDouble(capacityInput.getText().toString()) == 0)
+                        return;
+                    if (!consumptionInput.getText().toString().isEmpty()) {
+                        Float result = Float.parseFloat(consumptionInput.getText().toString()) / Float.parseFloat(capacityInput.getText().toString());
+                        range = (TextView) findViewById(R.id.range);
+                        String formattedString = String.format("%.02f", result);
+                        range.setText(formattedString+ " km");
+                    }
+                }catch (Exception e){e.printStackTrace();}
             }
 
             @Override
