@@ -3,7 +3,9 @@ package mihaiolaru.com.roadtrip;
 
 import android.annotation.SuppressLint;
 import android.app.DatePickerDialog;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -37,6 +39,8 @@ public class AddTrip extends AppCompatActivity {
 
         final EditText start_place = ((EditText) findViewById(R.id.editText));
         final EditText end_place = ((EditText) findViewById(R.id.editText3));
+
+        final Button setHomeStart = (Button)findViewById(R.id.setHomeStart);
 
         Intent intentGet = getIntent();
         final String start_coords1 = intentGet.getStringExtra("start_coords");
@@ -205,5 +209,14 @@ public class AddTrip extends AppCompatActivity {
             }
         });
 
+        setHomeStart.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                SharedPreferences sharedPreferences = getSharedPreferences("pref", Context.MODE_PRIVATE);
+                String home = sharedPreferences.getString("crdAddress","");
+                start_place.setText(home);
+                getIntent().putExtra("start_coords", home);
+            }
+        });
     }
 }
