@@ -145,8 +145,9 @@ public class SettingsActivity extends AppCompatActivity {
                 startActivity(settingsScreen);
             }
         });
+
         Intent _intent = getIntent();
-        TextView text = (TextView)findViewById(R.id.textView);
+//        TextView text = (TextView)findViewById(R.id.textView);
 
         if(_intent.getStringExtra("homeAddress") != null) {
 //            String[] crdArray = _intent.getStringExtra("homeAddress").split(":");
@@ -156,7 +157,7 @@ public class SettingsActivity extends AppCompatActivity {
             editor.putString("crdAddress",addressView.getText().toString());
             editor.commit();
 //            text.setText(newCrd);
-            //text.setText(_intent.getStringExtra("homeAddress"));
+            addressView.setText(_intent.getStringExtra("homeAddress"));
         }
 
         addressButton = (Button)findViewById(R.id.AddressHome);
