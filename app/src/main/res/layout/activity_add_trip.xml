@@ -30,9 +30,7 @@
             android:layout_gravity="center"
             android:text="Locatie Plecare"
             android:textColor="@android:color/background_dark"
-            android:textStyle="bold"
-            tools:layout_editor_absoluteX="105dp"
-            tools:layout_editor_absoluteY="66dp" />
+            android:textStyle="bold" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -42,9 +40,9 @@
 
             <Button
                 android:id="@+id/setHomeStart"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                android:background="@android:drawable/sym_action_email" />
+                android:layout_width="34dp"
+                android:layout_height="34dp"
+                android:background="@drawable/ic_house" />
 
             <EditText
                 android:id="@+id/editText"
@@ -53,15 +51,13 @@
                 android:ems="10"
                 android:hint="@string/hintPlec"
                 android:inputType="textPersonName|date"
-                tools:layout_editor_absoluteX="85dp"
-                tools:layout_editor_absoluteY="85dp" />
+                android:focusable="false"/>
 
             <ImageView
                 android:id="@+id/imageView2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                app:srcCompat="@drawable/ic_pin"
-                tools:layout_editor_absoluteX="300dp" />
+                app:srcCompat="@drawable/ic_pin" />
 
 
         </LinearLayout>
@@ -73,15 +69,20 @@
             android:layout_gravity="center"
             android:text="Data Plecare"
             android:textColor="@android:color/background_dark"
-            android:textStyle="bold"
-            tools:layout_editor_absoluteX="105dp"
-            tools:layout_editor_absoluteY="130dp" />
+            android:textStyle="bold" />
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="10dp"
             android:gravity="center">
+
+            <Button
+                android:id="@+id/gol"
+                android:layout_width="34dp"
+                android:layout_height="34dp"
+                android:visibility="invisible"/>
+
 
             <EditText
                 android:id="@+id/editText2"
@@ -90,16 +91,13 @@
                 android:ems="10"
                 android:hint="@string/dateFormat"
                 android:inputType="date"
-                tools:layout_editor_absoluteX="85dp"
-                tools:layout_editor_absoluteY="148dp" />
+                android:focusable="false"/>
 
             <ImageView
                 android:id="@+id/imageView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                app:srcCompat="@drawable/ic_calendar"
-                tools:layout_editor_absoluteX="300dp"
-                tools:layout_editor_absoluteY="44dp" />
+                app:srcCompat="@drawable/ic_calendar" />
 
         </LinearLayout>
 
@@ -110,15 +108,19 @@
             android:layout_gravity="center"
             android:text="Locatie Destinatie"
             android:textColor="@android:color/background_dark"
-            android:textStyle="bold"
-            tools:layout_editor_absoluteX="105dp"
-            tools:layout_editor_absoluteY="194dp" />
+            android:textStyle="bold" />
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="10dp"
             android:gravity="center">
+
+            <Button
+                android:id="@+id/gol2"
+                android:layout_width="34dp"
+                android:layout_height="34dp"
+                android:visibility="invisible"/>
 
             <EditText
                 android:id="@+id/editText3"
@@ -127,16 +129,13 @@
                 android:ems="10"
                 android:hint="@string/hintDest"
                 android:inputType="textPersonName"
-                tools:layout_editor_absoluteX="85dp"
-                tools:layout_editor_absoluteY="212dp" />
+                android:focusable="false"/>
 
             <ImageView
                 android:id="@+id/imageView3"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                app:srcCompat="@drawable/ic_finish_flag"
-                tools:layout_editor_absoluteX="324dp"
-                tools:layout_editor_absoluteY="106dp" />
+                app:srcCompat="@drawable/ic_finish_flag" />
 
         </LinearLayout>
 
@@ -147,9 +146,7 @@
             android:layout_gravity="center"
             android:text="Data Revenire"
             android:textColor="@android:color/background_dark"
-            android:textStyle="bold"
-            tools:layout_editor_absoluteX="105dp"
-            tools:layout_editor_absoluteY="263dp" />
+            android:textStyle="bold" />
 
 
         <LinearLayout
@@ -158,6 +155,13 @@
             android:layout_marginBottom="10dp"
             android:gravity="center">
 
+            <Button
+                android:id="@+id/gol3"
+                android:layout_width="34dp"
+                android:layout_height="34dp"
+                android:visibility="invisible"/>
+
+
             <EditText
                 android:id="@+id/editText4"
                 android:layout_width="wrap_content"
@@ -165,16 +169,13 @@
                 android:ems="10"
                 android:hint="@string/dateFormat"
                 android:inputType="date"
-                tools:layout_editor_absoluteX="85dp"
-                tools:layout_editor_absoluteY="281dp" />
+                android:focusable="false"/>
 
             <ImageView
                 android:id="@+id/imageView4"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                app:srcCompat="@drawable/ic_calendar"
-                tools:layout_editor_absoluteX="300dp"
-                tools:layout_editor_absoluteY="257dp" />
+                app:srcCompat="@drawable/ic_calendar" />
         </LinearLayout>
 
         <Button
@@ -182,9 +183,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:text="Submit"
-            tools:layout_editor_absoluteX="148dp"
-            tools:layout_editor_absoluteY="356dp" />
+            android:text="FIND" />
 
     </LinearLayout>
 
