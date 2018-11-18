@@ -45,8 +45,8 @@
                         <option name="values">
                           <map>
                             <entry key="assetSourceType" value="FILE" />
-                            <entry key="outputName" value="ic_house" />
-                            <entry key="sourceFile" value="G:\Iconite\house.svg" />
+                            <entry key="outputName" value="ic_road_with_broken_line" />
+                            <entry key="sourceFile" value="G:\Iconite\road-with-broken-line.svg" />
                           </map>
                         </option>
                       </PersistentState>
