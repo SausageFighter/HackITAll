@@ -1,6 +1,8 @@
 package mihaiolaru.com.roadtrip;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
@@ -149,13 +151,17 @@ public class chooseLocation extends FragmentActivity implements OnMapReadyCallba
         });
         Button register = (Button) findViewById(R.id.button2);
         register.setOnClickListener(new View.OnClickListener() {
+            @SuppressLint("DefaultLocale")
             public void onClick(View v) {
                 Intent initial = getIntent();
 
                 if(initial.getStringExtra("from").equals("home")){
                     Intent intent = new Intent(chooseLocation.this,SettingsActivity.class);
                     intent.putExtra("homeAddress",lat + ":" + lng);
-
+                    SharedPreferences sharedPreferences = getSharedPreferences("pref", Context.MODE_PRIVATE);
+                    SharedPreferences.Editor editor = sharedPreferences.edit();
+                    editor.putString("crdAddress",String.format("%.02f", lat) + " : " + String.format("%.02f", lng));
+                    editor.commit();
                     startActivity(intent);
                 }else{
 
