@@ -19,9 +19,9 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_marginTop="50dp"
         android:gravity="center_vertical|top"
-        android:orientation="vertical"
-        android:layout_marginTop="50dp">
+        android:orientation="vertical">
 
         <TextView
             android:id="@+id/textView4"
@@ -49,9 +49,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:ems="10"
+                android:focusable="false"
                 android:hint="@string/hintPlec"
-                android:inputType="textPersonName|date"
-                android:focusable="false"/>
+                android:inputType="textPersonName|date" />
 
             <ImageView
                 android:id="@+id/imageView2"
@@ -81,7 +81,7 @@
                 android:id="@+id/gol"
                 android:layout_width="34dp"
                 android:layout_height="34dp"
-                android:visibility="invisible"/>
+                android:visibility="invisible" />
 
 
             <EditText
@@ -89,9 +89,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:ems="10"
+                android:focusable="false"
                 android:hint="@string/dateFormat"
-                android:inputType="date"
-                android:focusable="false"/>
+                android:inputType="date" />
 
             <ImageView
                 android:id="@+id/imageView"
@@ -120,16 +120,16 @@
                 android:id="@+id/gol2"
                 android:layout_width="34dp"
                 android:layout_height="34dp"
-                android:visibility="invisible"/>
+                android:visibility="invisible" />
 
             <EditText
                 android:id="@+id/editText3"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:ems="10"
+                android:focusable="false"
                 android:hint="@string/hintDest"
-                android:inputType="textPersonName"
-                android:focusable="false"/>
+                android:inputType="textPersonName" />
 
             <ImageView
                 android:id="@+id/imageView3"
@@ -159,7 +159,7 @@
                 android:id="@+id/gol3"
                 android:layout_width="34dp"
                 android:layout_height="34dp"
-                android:visibility="invisible"/>
+                android:visibility="invisible" />
 
 
             <EditText
@@ -167,9 +167,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:ems="10"
+                android:focusable="false"
                 android:hint="@string/dateFormat"
-                android:inputType="date"
-                android:focusable="false"/>
+                android:inputType="date" />
 
             <ImageView
                 android:id="@+id/imageView4"

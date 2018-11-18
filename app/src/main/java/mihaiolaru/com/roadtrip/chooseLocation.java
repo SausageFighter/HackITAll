@@ -28,15 +28,13 @@ import java.util.concurrent.CountDownLatch;
 
 public class chooseLocation extends FragmentActivity implements OnMapReadyCallback {
 
-    private GoogleMap mMap;
-
+    final int MY_PERMISSIONS_REQUEST_READ_CONTACTS = 42;
     Double lat;
     Double lng;
 
     Double latStart;
     Double lngStart;
-
-    final int MY_PERMISSIONS_REQUEST_READ_CONTACTS = 42;
+    private GoogleMap mMap;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,7 +48,7 @@ public class chooseLocation extends FragmentActivity implements OnMapReadyCallba
 
                 lat = location.getLatitude();
                 lng = location.getLongitude();
-                Log.d("location",lat+" "+lng);
+                Log.d("location", lat + " " + lng);
             }
 
             @Override
@@ -70,7 +68,7 @@ public class chooseLocation extends FragmentActivity implements OnMapReadyCallba
         };
 
         LocationManager mLocationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
-        Log.d("kys","here we go");
+        Log.d("kys", "here we go");
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             if (ActivityCompat.shouldShowRequestPermissionRationale(chooseLocation.this, Manifest.permission.ACCESS_FINE_LOCATION)) {
 
@@ -92,16 +90,14 @@ public class chooseLocation extends FragmentActivity implements OnMapReadyCallba
                 // app-defined int constant. The callback method gets the
                 // result of the request.
             }
-        }
-        else {
-            Log.d("rip","locationManager");
+        } else {
+            Log.d("rip", "locationManager");
             mLocationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 30000, 0, mLocationListener);
             Location curr = mLocationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-            if(curr != null) {
+            if (curr != null) {
                 latStart = curr.getLatitude();
                 lngStart = curr.getLongitude();
-            }
-            else{
+            } else {
                 latStart = 0d;
                 lngStart = 0d;
             }
@@ -128,8 +124,8 @@ public class chooseLocation extends FragmentActivity implements OnMapReadyCallba
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
 
-        LatLng start = new LatLng(44.4425812,26.0530043);
-        if(latStart != null) {
+        LatLng start = new LatLng(44.4425812, 26.0530043);
+        if (latStart != null) {
             start = new LatLng(latStart, lngStart);
         }
         mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(start, 8.0f));
@@ -146,7 +142,7 @@ public class chooseLocation extends FragmentActivity implements OnMapReadyCallba
 
                 lat = point.latitude;
                 lng = point.longitude;
-                Log.d("coords",lat+" "+lng);
+                Log.d("coords", lat + " " + lng);
             }
         });
         Button register = (Button) findViewById(R.id.button2);
@@ -155,41 +151,41 @@ public class chooseLocation extends FragmentActivity implements OnMapReadyCallba
             public void onClick(View v) {
                 Intent initial = getIntent();
 
-                if(initial.getStringExtra("from").equals("home")){
-                    Intent intent = new Intent(chooseLocation.this,SettingsActivity.class);
-                    intent.putExtra("homeAddress",lat + ":" + lng);
+                if (initial.getStringExtra("from").equals("home")) {
+                    Intent intent = new Intent(chooseLocation.this, SettingsActivity.class);
+                    intent.putExtra("homeAddress", lat + ":" + lng);
                     SharedPreferences sharedPreferences = getSharedPreferences("pref", Context.MODE_PRIVATE);
                     SharedPreferences.Editor editor = sharedPreferences.edit();
-                    editor.putString("crdAddress",String.format("%.02f", lat) + " : " + String.format("%.02f", lng));
+                    editor.putString("crdAddress", String.format("%.02f", lat) + " : " + String.format("%.02f", lng));
                     editor.commit();
                     startActivity(intent);
-                }else{
+                } else {
 
-                    if(initial.getStringExtra("from").equals("start")){
+                    if (initial.getStringExtra("from").equals("start")) {
                         Intent intent = new Intent(chooseLocation.this, AddTrip.class);
                         intent.putExtra("start_coords", lat + ":" + lng);
 
                         if (initial.getStringExtra("dataPlecare") != null) {
-                            intent.putExtra("dataPlecare", initial.getStringExtra("dataPlecare") );
+                            intent.putExtra("dataPlecare", initial.getStringExtra("dataPlecare"));
                         }
                         if (initial.getStringExtra("dataIntoarcere") != null) {
-                            intent.putExtra("dataIntoarcere", initial.getStringExtra("dataIntoarcere") );
+                            intent.putExtra("dataIntoarcere", initial.getStringExtra("dataIntoarcere"));
                         }
 
-                        if(initial.getStringExtra("end_coords") != null)
-                            intent.putExtra("end_coords",initial.getStringExtra("end_coords"));
+                        if (initial.getStringExtra("end_coords") != null)
+                            intent.putExtra("end_coords", initial.getStringExtra("end_coords"));
                         startActivity(intent);
                     } else {
                         Intent intent = new Intent(chooseLocation.this, AddTrip.class);
-                        if(initial.getStringExtra("start_coords") != null)
-                            intent.putExtra("start_coords",initial.getStringExtra("start_coords"));
+                        if (initial.getStringExtra("start_coords") != null)
+                            intent.putExtra("start_coords", initial.getStringExtra("start_coords"));
                         intent.putExtra("end_coords", lat + ":" + lng);
 
                         if (initial.getStringExtra("dataPlecare") != null) {
-                            intent.putExtra("dataPlecare", initial.getStringExtra("dataPlecare") );
+                            intent.putExtra("dataPlecare", initial.getStringExtra("dataPlecare"));
                         }
                         if (initial.getStringExtra("dataIntoarcere") != null) {
-                            intent.putExtra("dataIntoarcere", initial.getStringExtra("dataIntoarcere") );
+                            intent.putExtra("dataIntoarcere", initial.getStringExtra("dataIntoarcere"));
                         }
 
                         startActivity(intent);

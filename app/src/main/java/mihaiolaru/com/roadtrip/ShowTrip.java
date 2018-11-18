@@ -40,15 +40,16 @@ import java.util.List;
 import java.util.Objects;
 import java.util.concurrent.atomic.AtomicReference;
 
-class Type{
+class Type {
     static String type;
 }
+
 class ServerGetter extends Thread {
 
     AtomicReference<String> result;
     String link;
 
-    public ServerGetter(String link){
+    public ServerGetter(String link) {
         this.link = link;
     }
 
@@ -71,7 +72,7 @@ class ServerGetter extends Thread {
     public void run() {
         try {
             result = new AtomicReference<String>(getUrlSource(this.link));
-        } catch (Exception e){
+        } catch (Exception e) {
             result = null;
             e.printStackTrace();
         }
@@ -80,10 +81,12 @@ class ServerGetter extends Thread {
 
 class DataParser {
 
-    /** Receives a JSONObject and returns a list of lists containing latitude and longitude */
-    public List<List<HashMap<String,String>>> parse(JSONObject jObject){
+    /**
+     * Receives a JSONObject and returns a list of lists containing latitude and longitude
+     */
+    public List<List<HashMap<String, String>>> parse(JSONObject jObject) {
 
-        List<List<HashMap<String, String>>> routes = new ArrayList<>() ;
+        List<List<HashMap<String, String>>> routes = new ArrayList<>();
         JSONArray jRoutes;
         JSONArray jLegs;
         JSONArray jSteps;
@@ -93,25 +96,25 @@ class DataParser {
             jRoutes = jObject.getJSONArray("routes");
 
             /** Traversing all routes */
-            for(int i=0;i<jRoutes.length();i++){
-                jLegs = ( (JSONObject)jRoutes.get(i)).getJSONArray("legs");
+            for (int i = 0; i < jRoutes.length(); i++) {
+                jLegs = ((JSONObject) jRoutes.get(i)).getJSONArray("legs");
                 List path = new ArrayList<>();
 
                 /** Traversing all legs */
-                for(int j=0;j<jLegs.length();j++){
-                    jSteps = ( (JSONObject)jLegs.get(j)).getJSONArray("steps");
+                for (int j = 0; j < jLegs.length(); j++) {
+                    jSteps = ((JSONObject) jLegs.get(j)).getJSONArray("steps");
 
                     /** Traversing all steps */
-                    for(int k=0;k<jSteps.length();k++){
+                    for (int k = 0; k < jSteps.length(); k++) {
                         String polyline = "";
-                        polyline = (String)((JSONObject)((JSONObject)jSteps.get(k)).get("polyline")).get("points");
+                        polyline = (String) ((JSONObject) ((JSONObject) jSteps.get(k)).get("polyline")).get("points");
                         List<LatLng> list = decodePoly(polyline);
 
                         /** Traversing all points */
-                        for(int l=0;l<list.size();l++){
+                        for (int l = 0; l < list.size(); l++) {
                             HashMap<String, String> hm = new HashMap<>();
-                            hm.put("lat", Double.toString((list.get(l)).latitude) );
-                            hm.put("lng", Double.toString((list.get(l)).longitude) );
+                            hm.put("lat", Double.toString((list.get(l)).latitude));
+                            hm.put("lng", Double.toString((list.get(l)).longitude));
                             path.add(hm);
                         }
                     }
@@ -121,7 +124,7 @@ class DataParser {
 
         } catch (JSONException e) {
             e.printStackTrace();
-        }catch (Exception e){
+        } catch (Exception e) {
         }
 
 
@@ -132,7 +135,7 @@ class DataParser {
     /**
      * Method to decode polyline points
      * Courtesy : http://jeffreysambells.com/2010/05/27/decoding-polylines-from-google-maps-direction-api-with-java
-     * */
+     */
     private List<LatLng> decodePoly(String encoded) {
 
         List<LatLng> poly = new ArrayList<>();
@@ -255,6 +258,124 @@ public class ShowTrip extends FragmentActivity implements OnMapReadyCallback {
         return data;
     }
 
+    void drawRoad(Double lat1, Double lng1, Double lat2, Double lng2) {
+        if (lat1 == null || lng1 == null)
+            return;
+
+        String url = getUrl(new LatLng(lat1, lng1), new LatLng(lat2, lng2));
+        FetchUrl FetchUrl = new FetchUrl();
+        FetchUrl.execute(url);
+    }
+
+    String getTripRoute(String start, String dest, String start_date, String end_date, String battery) {
+        start = start.replace(":", "_");
+        dest = dest.replace(":", "_");
+        Log.d("initial data", start + "---" + dest);
+        if (battery == null)
+            battery = "";
+        else
+            battery = "&battery=" + battery;
+        String link = "http://hackitall-env.3kg4pnfmbw.us-east-2.elasticbeanstalk.com/hackitall_webapp/index.php?location_start=" + start + "&location_end=" + dest + "&date_start=" + start_date + "&date_end=" + end_date + battery;
+        ServerGetter serverGetter = new ServerGetter(link);
+        serverGetter.start();
+        try {
+            serverGetter.join();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        String siteResult = serverGetter.result.get();
+        Log.d(" site result", siteResult);
+        if (siteResult.contains("Impossible route"))
+            return null;
+
+        return (siteResult.split("Final Route<br>")[1]).split("</h1>")[0];
+    }
+
+    @Override
+    public void onMapReady(GoogleMap googleMap) {
+        mMap = googleMap;
+
+
+        Intent intent = getIntent();
+        String start_coords = intent.getStringExtra("start_coords").replace(":", "_");
+        String dest_coords = intent.getStringExtra("dest_coords");
+        String start_date = intent.getStringExtra("start_date").replace(":", "_");
+        String end_date = intent.getStringExtra("end_date");
+        SharedPreferences sharedPreferences = getSharedPreferences("pref", Context.MODE_PRIVATE);
+        String battery = sharedPreferences.getString("battery", "100");
+
+        //road going
+        Double lastLat = null, lastLng = null;
+        String result = getTripRoute(start_coords, dest_coords, start_date, end_date, battery);
+        if (result == null)
+            return;
+        String[] points = result.split("\\|\\|\\|");
+        for (String point : points) {
+            //get coords
+            Double lat = Double.parseDouble(point.split("#")[0]);
+            Double lng = Double.parseDouble(point.split("#")[1]);
+            String name = "";
+            if (point.split("#").length > 2)
+                name = point.split("#")[2];
+            if (point.equals(points[0]))
+                name = "Start";
+            if (point.equals(points[points.length - 1]))
+                name = "Destination";
+            //add marker at position
+            MarkerOptions marker = new MarkerOptions().position(new LatLng(lat, lng)).title(name);
+
+            mMap.addMarker(marker);
+
+            if (point.equals(points[0])) {
+                LatLng start = new LatLng(lat, lng);
+                mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(start, 8.0f));
+                //mMap.moveCamera(CameraUpdateFactory.newLatLng(start));
+            } else {
+                Type.type = "front";
+                drawRoad(lastLat, lastLng, lat, lng);
+            }
+
+            lastLat = lat;
+            lastLng = lng;
+        }
+        //road returning
+
+        lastLat = null;
+        lastLng = null;
+        result = getTripRoute(dest_coords, start_coords, start_date, end_date, battery);
+        if (result == null)
+            return;
+        points = result.split("\\|\\|\\|");
+        for (String point : points) {
+            //get coords
+            Double lat = Double.parseDouble(point.split("#")[0]);
+            Double lng = Double.parseDouble(point.split("#")[1]);
+            String name = "";
+            if (point.split("#").length > 2)
+                name = point.split("#")[2];
+            if (point.equals(points[0]))
+                name = "";
+            if (point.equals(points[points.length - 1]))
+                name = "";
+            //add marker at position
+            MarkerOptions marker = new MarkerOptions().position(new LatLng(lat, lng)).title(name);
+
+            mMap.addMarker(marker);
+            if (point.equals(points[0])) {
+                LatLng start = new LatLng(lat, lng);
+                mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(start, 8.0f));
+                //mMap.moveCamera(CameraUpdateFactory.newLatLng(start));
+            } else {
+                Type.type = "back";
+                drawRoad(lastLat, lastLng, lat, lng);
+            }
+
+            lastLat = lat;
+            lastLng = lng;
+        }
+    }
+
     // Fetches data from url passed
     private class FetchUrl extends AsyncTask<String, Void, String> {
 
@@ -300,17 +421,17 @@ public class ShowTrip extends FragmentActivity implements OnMapReadyCallback {
 
             try {
                 jObject = new JSONObject(jsonData[0]);
-                Log.d("ParserTask",jsonData[0].toString());
+                Log.d("ParserTask", jsonData[0].toString());
                 DataParser parser = new DataParser();
                 Log.d("ParserTask", parser.toString());
 
                 // Starts parsing data
                 routes = parser.parse(jObject);
-                Log.d("ParserTask","Executing routes");
-                Log.d("ParserTask",routes.toString());
+                Log.d("ParserTask", "Executing routes");
+                Log.d("ParserTask", routes.toString());
 
             } catch (Exception e) {
-                Log.d("ParserTask",e.toString());
+                Log.d("ParserTask", e.toString());
                 e.printStackTrace();
             }
             return routes;
@@ -344,148 +465,26 @@ public class ShowTrip extends FragmentActivity implements OnMapReadyCallback {
                 // Adding all the points in the route to LineOptions
                 lineOptions.addAll(points);
                 lineOptions.width(15);
-                Log.d("onPostExecute","onPostExecute lineoptions decoded");
+                Log.d("onPostExecute", "onPostExecute lineoptions decoded");
 
             }
 
             // Drawing polyline in the Google Map for the i-th route
-            if(lineOptions != null) {
-                Log.d(" typeXD... ",Type.type);
-                if(Type.type.equals("front"))
+            if (lineOptions != null) {
+                Log.d(" typeXD... ", Type.type);
+                if (Type.type.equals("front"))
                     Type.type = "back";
                 else
                     Type.type = "front";
 
-                if(Type.type.equals("front"))
+                if (Type.type.equals("front"))
                     lineOptions.color(Color.GRAY);
                 else
                     lineOptions.color(Color.BLUE);
                 mMap.addPolyline(lineOptions);
-            }
-            else {
-                Log.d("onPostExecute","without Polylines drawn");
-            }
-        }
-    }
-
-    void drawRoad(Double lat1,Double lng1,Double lat2, Double lng2){
-        if(lat1 == null || lng1 == null)
-            return;
-
-        String url = getUrl(new LatLng(lat1,lng1), new LatLng(lat2,lng2));
-        FetchUrl FetchUrl = new FetchUrl();
-        FetchUrl.execute(url);
-    }
-    String getTripRoute(String start,String dest, String start_date,String end_date, String battery){
-        start = start.replace(":","_");
-        dest = dest.replace(":","_");
-        Log.d("initial data",start+"---"+dest);
-        if(battery == null)
-            battery = "";
-        else
-            battery = "&battery="+battery;
-        String link = "http://hackitall-env.3kg4pnfmbw.us-east-2.elasticbeanstalk.com/hackitall_webapp/index.php?location_start=" + start + "&location_end=" + dest + "&date_start="+start_date+"&date_end="+end_date+battery;
-        ServerGetter serverGetter = new ServerGetter(link);
-        serverGetter.start();
-        try {
-            serverGetter.join();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-
-        String siteResult =  serverGetter.result.get();
-        Log.d(" site result",siteResult);
-        if(siteResult.contains("Impossible route"))
-            return null;
-
-        return (siteResult.split("Final Route<br>")[1]).split("</h1>")[0];
-    }
-
-    @Override
-    public void onMapReady(GoogleMap googleMap) {
-        mMap = googleMap;
-
-
-        Intent intent = getIntent();
-        String start_coords = intent.getStringExtra("start_coords").replace(":","_");
-        String dest_coords = intent.getStringExtra("dest_coords");
-        String start_date = intent.getStringExtra("start_date").replace(":","_");
-        String end_date = intent.getStringExtra("end_date");
-        SharedPreferences sharedPreferences = getSharedPreferences("pref", Context.MODE_PRIVATE);
-        String battery = sharedPreferences.getString("battery","100");
-//        String start_coords = "43.5_-123.5";
-//        String dest_coords = "45.5_-122.5";
-//        String start_date = "a";
-//        String end_date = "a";
-
-        //road going
-        Double lastLat = null,lastLng = null;
-        String result = getTripRoute(start_coords,dest_coords,start_date,end_date,battery);
-        if(result == null)
-            return;
-        String[] points = result.split("\\|\\|\\|");
-        for (String point : points){
-            //get coords
-            Double lat = Double.parseDouble(point.split("#")[0]);
-            Double lng = Double.parseDouble(point.split("#")[1]);
-            String name = "";
-            if(point.split("#").length > 2)
-                name = point.split("#")[2];
-            if(point.equals(points[0]))
-                name = "Start";
-            if(point.equals(points[points.length - 1]))
-                name = "Destination";
-            //add marker at position
-            MarkerOptions marker = new MarkerOptions().position(new LatLng(lat, lng)).title(name);
-
-            mMap.addMarker(marker);
-
-            if(point.equals(points[0])){
-                LatLng start = new LatLng(lat, lng);
-                mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(start, 8.0f));
-                //mMap.moveCamera(CameraUpdateFactory.newLatLng(start));
             } else {
-                Type.type = "front";
-                drawRoad(lastLat,lastLng,lat,lng);
+                Log.d("onPostExecute", "without Polylines drawn");
             }
-
-            lastLat = lat;
-            lastLng = lng;
-        }
-        //road returning
-
-        lastLat = null;
-        lastLng = null;
-        result = getTripRoute(dest_coords,start_coords,start_date,end_date,battery);
-        if(result == null)
-            return;
-         points = result.split("\\|\\|\\|");
-        for (String point : points){
-            //get coords
-            Double lat = Double.parseDouble(point.split("#")[0]);
-            Double lng = Double.parseDouble(point.split("#")[1]);
-            String name = "";
-            if(point.split("#").length > 2)
-                name = point.split("#")[2];
-            if(point.equals(points[0]))
-                name = "";
-            if(point.equals(points[points.length - 1]))
-                name = "";
-            //add marker at position
-            MarkerOptions marker = new MarkerOptions().position(new LatLng(lat, lng)).title(name);
-
-            mMap.addMarker(marker);
-            if(point.equals(points[0])){
-                LatLng start = new LatLng(lat, lng);
-                mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(start, 8.0f));
-                //mMap.moveCamera(CameraUpdateFactory.newLatLng(start));
-            } else {
-                Type.type = "back";
-                drawRoad(lastLat,lastLng,lat,lng);
-            }
-
-            lastLat = lat;
-            lastLng = lng;
         }
     }
 }

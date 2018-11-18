@@ -34,14 +34,14 @@ public class SettingsActivity extends AppCompatActivity {
 
 //        TextView textView = (TextView)findViewById(R.id.editText8);
 
-        consumptionInput = (EditText)findViewById(R.id.consum);
-        capacityInput = (EditText)findViewById(R.id.baterie);
-        addressView = (TextView)findViewById(R.id.textView);
+        consumptionInput = (EditText) findViewById(R.id.consum);
+        capacityInput = (EditText) findViewById(R.id.baterie);
+        addressView = (TextView) findViewById(R.id.textView);
 
         sharedPreferences = getSharedPreferences("pref", Context.MODE_PRIVATE);
-        String battery = sharedPreferences.getString("battery","");
-        String cons = sharedPreferences.getString("consumption","");
-        String crd = sharedPreferences.getString("crdAddress","");
+        String battery = sharedPreferences.getString("battery", "");
+        String cons = sharedPreferences.getString("consumption", "");
+        String crd = sharedPreferences.getString("crdAddress", "");
 
         capacityInput.setText(battery);
         consumptionInput.setText(cons);
@@ -55,9 +55,11 @@ public class SettingsActivity extends AppCompatActivity {
                 Float result = Float.parseFloat(consumptionInput.getText().toString()) / Float.parseFloat(capacityInput.getText().toString());
                 range = (TextView) findViewById(R.id.range);
                 String formattedString = String.format("%.02f", result);
-                range.setText(formattedString+ " km");
+                range.setText(formattedString + " km");
             }
-        }catch (Exception e){e.printStackTrace();}
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
         final SharedPreferences.Editor editor = sharedPreferences.edit();
 
@@ -74,19 +76,21 @@ public class SettingsActivity extends AppCompatActivity {
                         return;
                     if (!capacityInput.getText().toString().isEmpty()) {
 
-                        editor.putString("battery",capacityInput.getText().toString());
-                        editor.putString("consumption",consumptionInput.getText().toString());
+                        editor.putString("battery", capacityInput.getText().toString());
+                        editor.putString("consumption", consumptionInput.getText().toString());
                         editor.commit();
 
 //                        consumptionInput.setText(sharedPreferences.getString("consumption","").toString());
 
 
-                        Float result = Float.parseFloat(sharedPreferences.getString("battery","")) / Float.parseFloat(sharedPreferences.getString("consumption",""));
+                        Float result = Float.parseFloat(sharedPreferences.getString("battery", "")) / Float.parseFloat(sharedPreferences.getString("consumption", ""));
                         range = (TextView) findViewById(R.id.range);
                         String formattedString = String.format("%.02f", result);
-                        range.setText(formattedString+ " km");
+                        range.setText(formattedString + " km");
                     }
-                }catch (Exception e){e.printStackTrace();}
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
             }
 
             @Override
@@ -110,19 +114,21 @@ public class SettingsActivity extends AppCompatActivity {
                         return;
                     if (!consumptionInput.getText().toString().isEmpty()) {
 
-                        editor.putString("battery",capacityInput.getText().toString());
-                        editor.putString("consumption",consumptionInput.getText().toString());
+                        editor.putString("battery", capacityInput.getText().toString());
+                        editor.putString("consumption", consumptionInput.getText().toString());
                         editor.commit();
 
 //                        capacityInput.setText(sharedPreferences.getString("battery",""));
 
-                        Float result = Float.parseFloat(sharedPreferences.getString("battery","")) / Float.parseFloat(sharedPreferences.getString("consumption",""));
+                        Float result = Float.parseFloat(sharedPreferences.getString("battery", "")) / Float.parseFloat(sharedPreferences.getString("consumption", ""));
                         //Float result = Float.parseFloat(consumptionInput.getText().toString()) / Float.parseFloat(capacityInput.getText().toString());
                         range = (TextView) findViewById(R.id.range);
                         String formattedString = String.format("%.02f", result);
-                        range.setText(formattedString+ " km");
+                        range.setText(formattedString + " km");
                     }
-                }catch (Exception e){e.printStackTrace();}
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
             }
 
             @Override
@@ -134,13 +140,13 @@ public class SettingsActivity extends AppCompatActivity {
 //        Double result =  Double.parseDouble(consumptionInput.getText().toString()) / Double.parseDouble(consumptionInput.getText().toString());
 //        range = (TextView)findViewById(R.id.range);
 //        range.setText(result.toString());
-        inapoiButton = (Button)findViewById(R.id.inapoi);
+        inapoiButton = (Button) findViewById(R.id.inapoi);
         inapoiButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
-                consumptionInput.setText(sharedPreferences.getString("consumption",""));
-                capacityInput.setText(sharedPreferences.getString("battery",""));
+                consumptionInput.setText(sharedPreferences.getString("consumption", ""));
+                capacityInput.setText(sharedPreferences.getString("battery", ""));
                 Intent settingsScreen = new Intent(SettingsActivity.this, AddTrip.class);
                 startActivity(settingsScreen);
             }
@@ -149,7 +155,7 @@ public class SettingsActivity extends AppCompatActivity {
         Intent _intent = getIntent();
 //        TextView text = (TextView)findViewById(R.id.textView);
 
-        if(_intent.getStringExtra("homeAddress") != null) {
+        if (_intent.getStringExtra("homeAddress") != null) {
 //            String[] crdArray = _intent.getStringExtra("homeAddress").split(":");
             //crd[0].substring(0,4);
 //            text.setText(_intent.getStringExtra("homeAddress"));
@@ -159,12 +165,12 @@ public class SettingsActivity extends AppCompatActivity {
             //addressView.setText(_intent.getStringExtra("homeAddress"));
         }
 
-        addressButton = (Button)findViewById(R.id.AddressHome);
+        addressButton = (Button) findViewById(R.id.AddressHome);
         addressButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent addressMapScreen = new Intent(SettingsActivity.this,chooseLocation.class);
-                addressMapScreen.putExtra("from","home");
+                Intent addressMapScreen = new Intent(SettingsActivity.this, chooseLocation.class);
+                addressMapScreen.putExtra("from", "home");
                 startActivity(addressMapScreen);
             }
         });

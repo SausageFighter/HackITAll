@@ -40,7 +40,7 @@ public class AddTrip extends AppCompatActivity {
         final EditText start_place = ((EditText) findViewById(R.id.editText));
         final EditText end_place = ((EditText) findViewById(R.id.editText3));
 
-        final Button setHomeStart = (Button)findViewById(R.id.setHomeStart);
+        final Button setHomeStart = (Button) findViewById(R.id.setHomeStart);
 
         Intent intentGet = getIntent();
         final String start_coords1 = intentGet.getStringExtra("start_coords");
@@ -213,7 +213,7 @@ public class AddTrip extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 SharedPreferences sharedPreferences = getSharedPreferences("pref", Context.MODE_PRIVATE);
-                String home = sharedPreferences.getString("crdAddress","");
+                String home = sharedPreferences.getString("crdAddress", "");
                 start_place.setText(home);
                 getIntent().putExtra("start_coords", home);
             }
