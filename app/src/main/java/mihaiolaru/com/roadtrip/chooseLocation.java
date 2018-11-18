@@ -151,18 +151,43 @@ public class chooseLocation extends FragmentActivity implements OnMapReadyCallba
         register.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 Intent initial = getIntent();
-                if(initial.getStringExtra("from").equals("start")){
-                    Intent intent = new Intent(chooseLocation.this, AddTrip.class);
-                    intent.putExtra("start_coords", lat + ":" + lng);
-                    if(initial.getStringExtra("end_coords") != null)
-                        intent.putExtra("end_coords",initial.getStringExtra("end_coords"));
+
+                if(initial.getStringExtra("from").equals("home")){
+                    Intent intent = new Intent(chooseLocation.this,SettingsActivity.class);
+                    intent.putExtra("homeAddress",lat + ":" + lng);
+
                     startActivity(intent);
-                } else {
-                    Intent intent = new Intent(chooseLocation.this, AddTrip.class);
-                    if(initial.getStringExtra("start_coords") != null)
-                        intent.putExtra("start_coords",initial.getStringExtra("start_coords"));
-                    intent.putExtra("end_coords", lat + ":" + lng);
-                    startActivity(intent);
+                }else{
+
+                    if(initial.getStringExtra("from").equals("start")){
+                        Intent intent = new Intent(chooseLocation.this, AddTrip.class);
+                        intent.putExtra("start_coords", lat + ":" + lng);
+
+                        if (initial.getStringExtra("dataPlecare") != null) {
+                            intent.putExtra("dataPlecare", initial.getStringExtra("dataPlecare") );
+                        }
+                        if (initial.getStringExtra("dataIntoarcere") != null) {
+                            intent.putExtra("dataIntoarcere", initial.getStringExtra("dataIntoarcere") );
+                        }
+
+                        if(initial.getStringExtra("end_coords") != null)
+                            intent.putExtra("end_coords",initial.getStringExtra("end_coords"));
+                        startActivity(intent);
+                    } else {
+                        Intent intent = new Intent(chooseLocation.this, AddTrip.class);
+                        if(initial.getStringExtra("start_coords") != null)
+                            intent.putExtra("start_coords",initial.getStringExtra("start_coords"));
+                        intent.putExtra("end_coords", lat + ":" + lng);
+
+                        if (initial.getStringExtra("dataPlecare") != null) {
+                            intent.putExtra("dataPlecare", initial.getStringExtra("dataPlecare") );
+                        }
+                        if (initial.getStringExtra("dataIntoarcere") != null) {
+                            intent.putExtra("dataIntoarcere", initial.getStringExtra("dataIntoarcere") );
+                        }
+
+                        startActivity(intent);
+                    }
                 }
             }
         });
