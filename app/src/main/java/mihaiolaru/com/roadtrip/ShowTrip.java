@@ -1,6 +1,8 @@
 package mihaiolaru.com.roadtrip;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.AsyncTask;
 import android.support.v4.app.FragmentActivity;
@@ -32,6 +34,9 @@ import java.util.List;
 import java.util.Objects;
 import java.util.concurrent.atomic.AtomicReference;
 
+class Type{
+    static String type;
+}
 class ServerGetter extends Thread {
 
     AtomicReference<String> result;
@@ -333,14 +338,22 @@ public class ShowTrip extends FragmentActivity implements OnMapReadyCallback {
                 // Adding all the points in the route to LineOptions
                 lineOptions.addAll(points);
                 lineOptions.width(15);
-                lineOptions.color(Color.BLUE);
-
                 Log.d("onPostExecute","onPostExecute lineoptions decoded");
 
             }
 
             // Drawing polyline in the Google Map for the i-th route
             if(lineOptions != null) {
+                Log.d(" typeXD... ",Type.type);
+                if(Type.type.equals("front"))
+                    Type.type = "back";
+                else
+                    Type.type = "front";
+
+                if(Type.type.equals("front"))
+                    lineOptions.color(Color.GRAY);
+                else
+                    lineOptions.color(Color.BLUE);
                 mMap.addPolyline(lineOptions);
             }
             else {
@@ -392,18 +405,19 @@ public class ShowTrip extends FragmentActivity implements OnMapReadyCallback {
         String dest_coords = intent.getStringExtra("dest_coords");
         String start_date = intent.getStringExtra("start_date").replace(":","_");
         String end_date = intent.getStringExtra("end_date");
-        String battery = "100";//TODO
+        SharedPreferences sharedPreferences = getSharedPreferences("pref", Context.MODE_PRIVATE);
+        String battery = sharedPreferences.getString("battery","100");
 //        String start_coords = "43.5_-123.5";
 //        String dest_coords = "45.5_-122.5";
 //        String start_date = "a";
 //        String end_date = "a";
 
+        //road going
         Double lastLat = null,lastLng = null;
         String result = getTripRoute(start_coords,dest_coords,start_date,end_date,battery);
         if(result == null)
             return;
         String[] points = result.split("\\|\\|\\|");
-        int stage = 1;
         for (String point : points){
             //get coords
             Double lat = Double.parseDouble(point.split("#")[0]);
@@ -417,7 +431,6 @@ public class ShowTrip extends FragmentActivity implements OnMapReadyCallback {
                 name = "Destination";
             //add marker at position
             MarkerOptions marker = new MarkerOptions().position(new LatLng(lat, lng)).title(name);
-            stage++;
 
             mMap.addMarker(marker);
 
@@ -426,6 +439,42 @@ public class ShowTrip extends FragmentActivity implements OnMapReadyCallback {
                 mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(start, 8.0f));
                 //mMap.moveCamera(CameraUpdateFactory.newLatLng(start));
             } else {
+                Type.type = "front";
+                drawRoad(lastLat,lastLng,lat,lng);
+            }
+
+            lastLat = lat;
+            lastLng = lng;
+        }
+        //road returning
+
+        lastLat = null;
+        lastLng = null;
+        result = getTripRoute(dest_coords,start_coords,start_date,end_date,battery);
+        if(result == null)
+            return;
+         points = result.split("\\|\\|\\|");
+        for (String point : points){
+            //get coords
+            Double lat = Double.parseDouble(point.split("#")[0]);
+            Double lng = Double.parseDouble(point.split("#")[1]);
+            String name = "";
+            if(point.split("#").length > 2)
+                name = point.split("#")[2];
+            if(point.equals(points[0]))
+                name = "";
+            if(point.equals(points[points.length - 1]))
+                name = "";
+            //add marker at position
+            MarkerOptions marker = new MarkerOptions().position(new LatLng(lat, lng)).title(name);
+
+            mMap.addMarker(marker);
+            if(point.equals(points[0])){
+                LatLng start = new LatLng(lat, lng);
+                mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(start, 8.0f));
+                //mMap.moveCamera(CameraUpdateFactory.newLatLng(start));
+            } else {
+                Type.type = "back";
                 drawRoad(lastLat,lastLng,lat,lng);
             }
 
